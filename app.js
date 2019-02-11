@@ -1,13 +1,13 @@
 const port = process.env.PORT || 3000
 const express = require('express')
-const morgan = require('mogan')
+const morgan = require('morgan')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
 //THIS WILL NEED CHANGING WHEN DEPLOYED
-const connectionstring = `mongodb://localhost:27017/${process.env.MONGODB_NAME}`
+const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
 mongoose.connect(connectionstring, {useNewUrlParser: true})
 
 const app = express()
@@ -15,6 +15,9 @@ app.use(bodyParser.json())
 app.use(cors())
 
 if(process.env.NODE_ENV === 'development') app.use(morgan('dev'))
+
+const auth = require('./routes/auth')
+app.use('/auth', auth)
 
 app.use((err, req, res, next) => {
     console.error(err)

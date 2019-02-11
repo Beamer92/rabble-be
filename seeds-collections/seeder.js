@@ -1,7 +1,7 @@
 //this is just a script to run collection and seed creation on a local install
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const Users = require('../models/userData.model')
+const Users = require('../models/userDBModel')
 
 const connectionstring = `mongodb://localhost:27017/rabbleDB`
 mongoose.connect(connectionstring, {useNewUrlParser: true})
