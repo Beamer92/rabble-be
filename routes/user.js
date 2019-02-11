@@ -4,5 +4,6 @@ const userCon = require('../controllers/user')
 const router = express.Router()
 
 router.get('/', userCon.getOneByUsername)
+// router.get('/', userCon.getget)
 
 module.exports = router
