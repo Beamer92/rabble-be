@@ -7,3 +7,7 @@ router.get('/', userCon.getOneByUsername)
 // router.get('/', userCon.getget)
 
 module.exports = router
+
+// mongo
+// use rabbleDB
+// db.getCollection('users').find()
