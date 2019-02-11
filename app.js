@@ -4,6 +4,7 @@ const morgan = require('mogan')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 //THIS WILL NEED CHANGING WHEN DEPLOYED
 const connectionstring = `mongodb://localhost:27017/${process.env.MONGODB_NAME}`
