@@ -1,7 +1,23 @@
 const express = require('express')
-// import {client} from '../redis'
-// import * as helper from '../lib/helpers'
+const helper = require('../lib/helpers')
 
 const router = express.Router()
 
-// router.get('/', )
+// const getGames = () => {
+//     return helper.fetchGames()
+//     .then(res => {
+//         return res
+//     })
+//     .catch(err => {
+//         next(err)
+//     })
+// }
+
+router.get('/', (req,res,next) => {
+    helper.fetchGames()
+    .then(games => {
+        res.send(games)
+    })
+})
+
+module.exports = router

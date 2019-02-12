@@ -1,19 +1,11 @@
-"use strict";
-import redis from "redis";
+const redis = require('redis')
+const {promisify} = require('util')
 
-Promise.promisifyAll(redis.RedisClient.prototype);
-Promise.promisifyAll(redis.Multi.prototype);
+const client = redis.createClient();
 
-export let client = () => {
-    return new Promise((resolve, reject) => {
-        let connector = redis.createClient(process.env.REDIS_URL);
-
-        connector.on("error", () => {
-            reject("Redis Connection failed");
-        });
-
-        connector.on("connect", () => {
-            resolve(connector);
-        });
-    });
+const redisAsPromised = {
+  get: promisify(client.get).bind(client),
+  set: promisify(client.set).bind(client)
 };
+
+module.exports = {redisAsPromised}

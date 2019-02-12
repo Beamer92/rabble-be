@@ -24,6 +24,7 @@ const user = require('./routes/user')
 const game = require('./routes/game')
 app.use('/auth', auth)
 app.use('/user', user)
+app.use('/game', game)
 
 
 app.use((err, req, res, next) => {
