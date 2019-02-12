@@ -3,8 +3,9 @@ const userCon = require('../controllers/user')
 
 const router = express.Router()
 
-router.get('/', userCon.getOneByUsername)
-// router.get('/', userCon.getget)
+router.get('/', userCon.getUsers)
+router.get('/:id', userCon.getById)
+
 
 module.exports = router
 

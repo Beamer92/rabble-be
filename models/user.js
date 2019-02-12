@@ -1,11 +1,16 @@
 const mongoose = require('mongoose')
 const User = require('../models/userDBModel')
 
-const getOneByUsername = (username) => {
-        return User.findOne({'username': username}, 'username, gamesWon, highestScore, createDate', function(err, user){
-        if(err) throw {status: 404, message: 'User not found'}
-        return JSON.stringify(user)
-    })
+const getById = (id) => {
+    return User.findOne({'_id': id}).select('username gamesWon highestScore createDate password')
 }
 
-module.exports = {getOneByUsername}
+const getAll = () => {
+    return User.find({})
+}
+
+const getOneByUsername = (username) => {
+    return User.findOne({'username': username}).select('username gamesWon highestScore createDate password')
+}
+
+module.exports = {getById, getAll, getOneByUsername}

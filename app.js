@@ -21,6 +21,7 @@ if(process.env.NODE_ENV === 'development') app.use(morgan('dev'))
 
 const auth = require('./routes/auth')
 const user = require('./routes/user')
+const game = require('./routes/game')
 app.use('/auth', auth)
 app.use('/user', user)
 
