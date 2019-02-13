@@ -4,20 +4,21 @@ const morgan = require('morgan')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const helpers = require('./lib/helpers')
+const app = express()
 
-if(process.env.NODE_ENV !== 'production'){
+app.use(bodyParser.json())
+app.use(cors())
+app.use(morgan('dev'))
+
+if(process.env.NODE_ENV !== 'production') {
   require('dotenv').load()
+  helpers.redisFlush()
 }
 
 //THIS WILL NEED CHANGING WHEN DEPLOYED
 const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
 mongoose.connect(connectionstring, {useNewUrlParser: true})
-
-const app = express()
-app.use(bodyParser.json())
-app.use(cors())
-
-if(process.env.NODE_ENV === 'development') app.use(morgan('dev'))
 
 const auth = require('./routes/auth')
 const user = require('./routes/user')
@@ -25,10 +26,6 @@ const game = require('./routes/game')
 app.use('/auth', auth)
 app.use('/user', user)
 app.use('/game', game)
-
-const helpers = require('./lib/helpers')
-helpers.launchGames()
-
 
 app.use((err, req, res, next) => {
     console.error(err)
