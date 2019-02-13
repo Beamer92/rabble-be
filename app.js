@@ -26,6 +26,9 @@ app.use('/auth', auth)
 app.use('/user', user)
 app.use('/game', game)
 
+const helpers = require('./lib/helpers')
+helpers.launchGames()
+
 
 app.use((err, req, res, next) => {
     console.error(err)

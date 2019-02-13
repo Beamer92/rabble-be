@@ -3,6 +3,10 @@ const helper = require('../lib/helpers')
 
 const router = express.Router()
 
+const launchGames = () => {
+    //launch a blank state of games
+}
+
 // const getGames = () => {
 //     return helper.fetchGames()
 //     .then(res => {
