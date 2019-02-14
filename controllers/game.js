@@ -64,14 +64,46 @@ const retireGame = (req, res, next) => {
 }
 
 const addUserToGame = (req, res, next) => {
-    
+    return helper.addUserToGame(req.params.gameId, req.params.username)
+    .then(result => {
+        return res.send(result)
+    })
+    .catch(err => {
+        next(err)
+    })
 }
 
 const removeUserFromGame = (req, res, next) => {
-    //this will be tricky to fire when a user closes a browser, consider also running on a timeout 
+    return helper.removeUserFromGame(req.params.gameId, req.params.username)
+    .then(result => {
+        return res.send('User removed from game')
+    })
+    .catch(err => {
+        next(err)
+    })
+}
+
+const getUser = (req,res,next) => {
+    return helper.getUser(req.params.username)
+    .then(result => {
+        return res.send(result)
+    })
+    .catch(err => {
+        next(err)
+    })
+}
+
+const editUser = (req,res,next) => {
+    return helper.editUser(req.params.username, req.params.letters, req.params.position)
+    .then(result => {
+        return res.send(result)
+    })
+    .catch(err => {
+        next(err)
+    })
 }
 
 //next steps: add user to game, remove user from game
 
 
-module.exports = {getLobby, createGame, getGame, getGameItem, retireGame, addUserToGame, removeUserFromGame}
+module.exports = {getLobby, createGame, getGame, getGameItem, retireGame, addUserToGame, removeUserFromGame, getUser, editUser}
