@@ -6,6 +6,11 @@ const router = express.Router()
 
 router.get('/lobby', gameCon.getLobby)
 router.post('/', gameCon.createGame)
+router.get('/:gameId', gameCon.getGame)
+router.delete('/:gameId', gameCon.retireGame)
+router.get('/:gameId/item/:key', gameCon.getGameItem)
+router.put('/:gameId/user/:username', gameCon.addUserToGame)
+router.delete('/:gameId/user/:username', gameCon.removeUserFromGame)
 
 
 
