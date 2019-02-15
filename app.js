@@ -18,7 +18,7 @@ if(process.env.NODE_ENV !== 'production') {
 
 //THIS WILL NEED CHANGING WHEN DEPLOYED
 const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
-mongoose.connect(connectionstring, {useNewUrlParser: true})
+mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
 const auth = require('./routes/auth')
 const user = require('./routes/user')

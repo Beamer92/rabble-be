@@ -4,6 +4,7 @@ const userCon = require('../controllers/user')
 const router = express.Router()
 
 router.get('/', userCon.getUsers)
+router.post('/', userCon.createUser)
 router.get('/:id', userCon.getById)
 
 
