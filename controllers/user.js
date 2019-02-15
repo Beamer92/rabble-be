@@ -32,7 +32,7 @@ const getUsers = (req,res,next) => {
 const createUser = (req,res,next) => {
     if(!req.body.username || !req.body.password) next({status: 400, message: "Email and Password Required"})
     let pw = req.body.password
-    if(!/[a-zA-Z]/.test(pw) || !/[0-9]/.test(pw) || !/[&._^%&*@#]/.test(pw) || pw.length < 8) next({status: 400, message: "Password does not meet security standards"})
+    if(!/[a-zA-Z]/.test(pw) || !/[0-9]/.test(pw) || !/[&._$^%*@#]/.test(pw) || pw.length < 8) next({status: 400, message: "Password does not meet security standards"})
     userMod.createUser(req.body.username, pw)
     .then(user => {
         res.status(201).send(user)

@@ -3,15 +3,15 @@ const Users = require('../models/userDBModel')
 const bcrypt = require('bcrypt')
 
 const getById = (id) => {
-    return User.findOne({'_id': id}).select('username gamesWon highestScore createDate password')
+    return Users.findOne({'_id': id}).select('username gamesWon highestScore createDate password')
 }
 
 const getAll = () => {
-    return User.find({})
+    return Users.find({})
 }
 
 const getOneByUsername = (username) => {
-    return User.findOne({'username': username}).select('username gamesWon highestScore createDate password')
+    return Users.findOne({'username': username}).select('username gamesWon highestScore createDate password')
 }
 
 const createUser = (username, password) => {
