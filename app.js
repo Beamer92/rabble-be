@@ -6,6 +6,11 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const helpers = require('./lib/helpers')
 const app = express()
+let server = require('http').Server(app)
+var io = require('socket.io').listen(server);
+const auth = require('./routes/auth')
+const user = require('./routes/user')
+const game = require('./routes/game')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -20,12 +25,28 @@ if(process.env.NODE_ENV !== 'production') {
 const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
-const auth = require('./routes/auth')
-const user = require('./routes/user')
-const game = require('./routes/game')
+
+io.on('connection', socket => {
+  console.log('New client connected ')
+
+  socket.on('connect game', async (username) => {
+    let result = await game.newUser(username)
+    io.sockets.emit('connect game', result)
+  })
+
+  socket.on('send letters', (letters) => {
+    console.log('letters array is ', letters)
+    io.sockets.emit('send letters', letters.join(''))
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+})
+
 app.use('/auth', auth)
 app.use('/user', user)
-app.use('/game', game)
+app.use('/game', game.router)
 
 app.use((err, req, res, next) => {
     console.error(err)
@@ -39,5 +60,5 @@ app.use((req, res, next) => {
   
 if (process.env.NODE_ENV !== 'development') {
     const listener = () => console.log(`Words are hard, but roving on port ${port} is easy`)
-    let server = app.listen(port, listener)
+    server.listen(port, listener)
 }

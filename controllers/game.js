@@ -2,41 +2,56 @@ const helper = require('../lib/helpers')
 const shortid = require('shortid')
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-@') //set characters for shortid, don't want underscores or dashes
 
-const getLobby = (req,res,next) => {
+
+const getLobby = () => {
     return helper.getLobby()
     .then(result => {
-        if(result) return res.send(result)
-        return res.send('There is no Lobby Object in Memory')
+        return result
     })
     .catch(err => {
-        next(err)
+        // next(err)
+        console.log(err)
     })
 }
 
-const createGame = (req,res,next) => {
+const getGame = (gameId) => {
+    return helper.getGame(gameId)
+    .then(result => {
+        if(!result) return 'Game Not Found'
+        return result
+    })
+    .catch(err => {
+        // next(err)
+        console.log(err)
+    })
+}
+
+const createGame = () => {
     const gameId = shortid.generate()
     return helper.addToLobby(gameId)
     .then(() => {
         return helper.createGame(gameId)
     })
     .then(result => {
-        return res.send(gameId)
+        return gameId
     })
     .catch(err => {
-        next(err)
+        // next(err)
+        console.log(err)
     })
 }
 
-const getGame = (req,res,next) => {
-    return helper.getGame(req.params.gameId)
+const addUserToGame = (gameId, username) => {
+    return helper.addUserToGame(gameId, username)
     .then(result => {
-        if(!result) return next({status: 400, message: "Game Not Found"})
-        return res.send(result)
+        return gameId
     })
     .catch(err => {
-        next(err)
+        // next(err)
+        console.log(err)
     })
 }
+
 
 const getGameItem = (req,res,next) => {
     return helper.getGame(req.params.gameId)
@@ -63,15 +78,6 @@ const retireGame = (req, res, next) => {
     })
 }
 
-const addUserToGame = (req, res, next) => {
-    return helper.addUserToGame(req.params.gameId, req.params.username)
-    .then(result => {
-        return res.send(result)
-    })
-    .catch(err => {
-        next(err)
-    })
-}
 
 const removeUserFromGame = (req, res, next) => {
     return helper.removeUserFromGame(req.params.gameId, req.params.username)
