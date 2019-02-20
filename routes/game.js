@@ -33,4 +33,12 @@ const findGame = async (lobby) => {
     return findGame(lobby.slice(1))
 }
 
-module.exports = {router, newUser}
+const getUser = async(username) => {
+   return await gameCon.getUser(username)
+}
+
+const getGame = async (gameId) => {
+    return await gameCon.getGame(gameId)
+}
+
+module.exports = {router, newUser, getUser, getGame}

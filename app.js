@@ -27,11 +27,27 @@ mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true 
 
 
 io.on('connection', socket => {
-  console.log('New client connected ')
+  console.log('New client connected ', socket.id)
 
   socket.on('connect game', async (username) => {
-    let result = await game.newUser(username)
-    io.sockets.emit('connect game', result)
+    let user = await game.getUser(username)
+    if(!user){
+      let gameId = await game.newUser(username)
+      io.sockets.emit('connect game', gameId, username)
+    }
+    else {
+      io.sockets.emit('connect game', user.gameId, username)
+    }
+  })
+
+  socket.on('get user', async (username) => {
+    let user = await game.getUser(username)
+    io.sockets.emit('get user', user)
+  })
+
+  socket.on('get game', async (gameId) => {
+    let gameObj = await game.getGame(gameId)
+    io.sockets.emit('get game', gameObj)
   })
 
   socket.on('send letters', (letters) => {
@@ -39,7 +55,7 @@ io.on('connection', socket => {
     io.sockets.emit('send letters', letters.join(''))
   })
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (username) => {
     console.log('user disconnected')
   })
 })

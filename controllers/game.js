@@ -53,6 +53,17 @@ const addUserToGame = (gameId, username) => {
 }
 
 
+const getUser = (username) => {
+    return helper.getUser(username)
+    .then(result => {
+        return result
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+
 const getGameItem = (req,res,next) => {
     return helper.getGame(req.params.gameId)
     .then(result => {
@@ -89,15 +100,6 @@ const removeUserFromGame = (req, res, next) => {
     })
 }
 
-const getUser = (req,res,next) => {
-    return helper.getUser(req.params.username)
-    .then(result => {
-        return res.send(result)
-    })
-    .catch(err => {
-        next(err)
-    })
-}
 
 const editUser = (req,res,next) => {
     return helper.editUser(req.params.username, req.params.letters, req.params.position)
