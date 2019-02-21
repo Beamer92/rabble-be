@@ -73,6 +73,16 @@ const editUser = (username, rover, letters) => {
     })
 }
 
+const editGame = (gameId, mapgrid) => {
+    return helper.editGame(gameId, mapgrid)
+    .then(result => {
+        return result
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 const getData = (id, key) => {
     return helper.getData(id, key)
     .then(result => {
@@ -121,4 +131,4 @@ const removeUserFromGame = (req, res, next) => {
 
 
 
-module.exports = {getLobby, createGame, getGame, getData, retireGame, addUserToGame, removeUserFromGame, getUser, editUser}
+module.exports = {getLobby, createGame, getGame, getData, retireGame, addUserToGame, removeUserFromGame, getUser, editUser, editGame}

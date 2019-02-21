@@ -45,6 +45,10 @@ const editUser = async (username, rover, letters) => {
     return await gameCon.editUser(username, rover, letters)
 }
 
+const editGame = async (gameId, mapgrid) => {
+    return await gameCon.editGame(gameId, mapgrid)
+} 
+
 const getRovers = (userList)=>{
     let userDataPromise = userList.map(user => {
         return Promise.all([Promise.resolve(user), gameCon.getData(user, 'position')])
@@ -52,4 +56,4 @@ const getRovers = (userList)=>{
     return Promise.all(userDataPromise)
 }
 
-module.exports = {router, newUser, getUser, getGame, editUser, getRovers}
+module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers}

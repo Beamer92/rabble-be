@@ -46,7 +46,8 @@ io.on('connection', socket => {
   	})
 
  	socket.on('get game', async (gameId) => {
-    	let gameObj = await game.getGame(gameId)
+			let gameObj = await game.getGame(gameId)
+			console.log('gg', gameObj)
     	io.sockets.emit('get game', gameObj)
   	})
 
