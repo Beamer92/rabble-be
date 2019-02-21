@@ -63,21 +63,40 @@ const getUser = (username) => {
     })
 }
 
-
-const getGameItem = (req,res,next) => {
-    return helper.getGame(req.params.gameId)
+const editUser = (username, rover, letters) => {
+    return helper.editUser(username, rover, letters)
     .then(result => {
-        if(!result) return next({status: 400, message: "Game Not Found"})
-        return helper.getGameItem(req.params.gameId, req.params.key)
-    })
-    .then(result => {
-        if(!result) return next({status: 400, message: "Game Item Not Found"})
-        return res.send(result)
+        return result
     })
     .catch(err => {
-        next(err)
+        console.log(err)
     })
 }
+
+const getData = (id, key) => {
+    return helper.getData(id, key)
+    .then(result => {
+        return result
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+// const getGameItem = (req,res,next) => {
+//     return helper.getGame(req.params.gameId)
+//     .then(result => {
+//         if(!result) return next({status: 400, message: "Game Not Found"})
+//         return helper.getGameItem(req.params.gameId, req.params.key)
+//     })
+//     .then(result => {
+//         if(!result) return next({status: 400, message: "Game Item Not Found"})
+//         return res.send(result)
+//     })
+//     .catch(err => {
+//         next(err)
+//     })
+// }
 
 const retireGame = (req, res, next) => {
     return helper.retireGame(req.params.gameId)
@@ -101,17 +120,5 @@ const removeUserFromGame = (req, res, next) => {
 }
 
 
-const editUser = (req,res,next) => {
-    return helper.editUser(req.params.username, req.params.letters, req.params.position)
-    .then(result => {
-        return res.send(result)
-    })
-    .catch(err => {
-        next(err)
-    })
-}
 
-//next steps: add user to game, remove user from game
-
-
-module.exports = {getLobby, createGame, getGame, getGameItem, retireGame, addUserToGame, removeUserFromGame, getUser, editUser}
+module.exports = {getLobby, createGame, getGame, getData, retireGame, addUserToGame, removeUserFromGame, getUser, editUser}

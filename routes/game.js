@@ -7,11 +7,11 @@ const router = express.Router()
 // router.post('/', gameCon.createGame) //changed to coket function
 // router.get('/:gameId', gameCon.getGame) changed to socket function
 
-router.get('/user/:username', gameCon.getUser)
-router.put('/user/:username', gameCon.editUser)
+// router.get('/user/:username', gameCon.getUser) //changed to socket function
+// router.put('/user/:username', gameCon.editUser)
 
 router.delete('/:gameId', gameCon.retireGame)
-router.get('/:gameId/item/:key', gameCon.getGameItem)
+// router.get('/:gameId/item/:key', gameCon.getGameItem)
 router.put('/:gameId/user/:username', gameCon.addUserToGame)
 router.delete('/:gameId/user/:username', gameCon.removeUserFromGame)
 
@@ -41,4 +41,15 @@ const getGame = async (gameId) => {
     return await gameCon.getGame(gameId)
 }
 
-module.exports = {router, newUser, getUser, getGame}
+const editUser = async (username, rover, letters) => {
+    return await gameCon.editUser(username, rover, letters)
+}
+
+const getRovers = (userList)=>{
+    let userDataPromise = userList.map(user => {
+        return Promise.all([Promise.resolve(user), gameCon.getData(user, 'position')])
+    })
+    return Promise.all(userDataPromise)
+}
+
+module.exports = {router, newUser, getUser, getGame, editUser, getRovers}
