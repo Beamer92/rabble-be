@@ -61,4 +61,8 @@ const nextTurn= async (gameId)=> {
     return await helpers.nextTurn(gameId)
 }
 
-module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn}
+const scoreWord = async(gameId, username, letters)=>{
+    return await helpers.scoreWord(gameId, username, letters)
+}
+
+module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord}

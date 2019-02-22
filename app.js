@@ -70,6 +70,11 @@ io.on('connection', socket => {
 			io.sockets.emit('get game', gameObj)
 		})
 
+		socket.on('score word', async (gameId, username, letters) => {
+			let score = await game.scoreWord(gameId, username, letters)
+			io.sockets.to(socket.id).emit('score word', `Score is ${score}`)
+		})
+
   	socket.on('disconnect', () => {
 		console.log('user disconnected')
 		//need to remove user from game here entirely....
