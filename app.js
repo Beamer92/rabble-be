@@ -25,7 +25,6 @@ if(process.env.NODE_ENV !== 'production') {
 const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
-
 io.on('connection', socket => {
   	console.log('New client connected ', socket.id)
 
@@ -41,35 +40,35 @@ io.on('connection', socket => {
   	})
 
   	socket.on('get user', async (username) => {
-		let user = await game.getUser(username)
+			let user = await game.getUser(username)
     	io.sockets.to(socket.id).emit('get user', user)
   	})
 
- 	socket.on('get game', async (gameId) => {
-			let gameObj = await game.getGame(gameId)
-			console.log('gg', gameObj)
-    	io.sockets.emit('get game', gameObj)
-  	})
+		socket.on('get game', async (gameId) => {
+				let gameObj = await game.getGame(gameId)
+				io.sockets.emit('get game', gameObj)
+		})
 
-  	socket.on('set user', async (username, rover, letters)=> {
-		await game.editUser(username, rover, letters)
-		io.sockets.to(socket.id).emit(username, 'updated')
-	  })
-	  
-	socket.on('set game', async (gameId, mapgrid)=>{
-		await game.editGame(gameId, mapgrid)
-		io.sockets.to(socket.id).emit('grid updated')
-	})
+		socket.on('set user', async (username, rover, letters)=> {
+			await game.editUser(username, rover, letters)
+			io.sockets.to(socket.id).emit(username, 'updated')
+			socket.broadcast.emit('update users');
+		})
+			
+		socket.on('set game', async (gameId, mapgrid)=>{
+			await game.editGame(gameId, mapgrid)
+			io.sockets.to(socket.id).emit('grid updated')
+		})
 
-	socket.on('get rovers', async (userList)=>{
-		let result = await game.getRovers(userList)
-		io.sockets.to(socket.id).emit('get rovers', result)
-	})
+		socket.on('get rovers', async (userList)=>{
+			let result = await game.getRovers(userList)
+			io.sockets.to(socket.id).emit('get rovers', result)
+		})
 
-  	socket.on('send letters', (letters) => {
-    	console.log('socket is ', socket.id)
-    	io.sockets.emit('send letters', letters.join(''))
-  	})
+		socket.on('next turn', async (gameId) => {
+			let gameObj = await game.nextTurn(gameId)
+			io.sockets.emit('get game', gameObj)
+		})
 
   	socket.on('disconnect', () => {
 		console.log('user disconnected')

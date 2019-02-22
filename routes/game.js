@@ -1,5 +1,6 @@
 const express = require('express')
 const gameCon = require('../controllers/game')
+const helpers = require('../lib/helpers')
 
 const router = express.Router()
 
@@ -56,4 +57,8 @@ const getRovers = (userList)=>{
     return Promise.all(userDataPromise)
 }
 
-module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers}
+const nextTurn= async (gameId)=> {
+    return await helpers.nextTurn(gameId)
+}
+
+module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn}
