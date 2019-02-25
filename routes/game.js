@@ -17,11 +17,13 @@ router.put('/:gameId/user/:username', gameCon.addUserToGame)
 router.delete('/:gameId/user/:username', gameCon.removeUserFromGame)
 
 const newUser = async (username) => {
+    console.log('newUser ', username)
     let lobby = await gameCon.getLobby()
     let openGame = await findGame(lobby)
     if(!openGame){
         openGame = await gameCon.createGame()
     } 
+    console.log('open game here ', openGame)
     let result = await gameCon.addUserToGame(openGame, username)
     return result
 }

@@ -88,6 +88,25 @@ io.on('connection', socket => {
 		}
 	})
 
+	socket.on('newGame', async(gameId) => {
+
+		let endGame = await game.getGame(gameId)
+		let uList = JSON.parse(endGame.users)
+		console.log('uList ', uList)
+		let retired = await game.retireGame(gameId)
+		let users = uList.map(u => game.newUser(u.name))
+
+
+		console.log('user promises ', users)
+		//why is this running?
+
+
+		// let newGameId = await Promise.all(users)
+		// for(let u = 0; u < endGame.users.length -1; i++){
+		// 	io.sockets.emit('connect game', newGameId, endGame.users[u].name)
+		// }
+	})
+
 	socket.on('disconnect', () => {
 		console.log('user disconnected')
 		//need to remove user from game here entirely....
