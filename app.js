@@ -67,8 +67,12 @@ io.on('connection', socket => {
 
 		socket.on('next turn', async (gameId) => {
 			let gameObj = await game.nextTurn(gameId)
-			//if gameObj hasOwnProperty('winner) emit gameWinner
-			io.sockets.emit('get game', gameObj)
+			if(gameObj.hasOwnProperty('winners')){
+				io.sockets.emit('winners', gameObj)
+			}
+			else {
+				io.sockets.emit('get game', gameObj)
+			}
 		})
 
 		socket.on('score word', async (gameId, username, letters) => {

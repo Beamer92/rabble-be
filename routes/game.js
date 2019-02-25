@@ -52,7 +52,7 @@ const editGame = async (gameId, mapgrid) => {
 
 const getRovers = (userList)=>{
     let userDataPromise = userList.map(user => {
-        return Promise.all([Promise.resolve(user), gameCon.getData(user, 'position')])
+        return Promise.all([Promise.resolve(user.name), gameCon.getData(user.name, 'position')])
     })
     return Promise.all(userDataPromise)
 }
