@@ -44,46 +44,54 @@ io.on('connection', socket => {
     	io.sockets.to(socket.id).emit('get user', user)
   	})
 
-		socket.on('get game', async (gameId) => {
-				let gameObj = await game.getGame(gameId)
-				io.sockets.emit('get game', gameObj)
-		})
+	socket.on('get game', async (gameId) => {
+			let gameObj = await game.getGame(gameId)
+			io.sockets.emit('get game', gameObj)
+	})
 
-		socket.on('set user', async (username, rover, letters)=> {
-			await game.editUser(username, rover, letters)
-			io.sockets.to(socket.id).emit(username, 'updated')
-			socket.broadcast.emit('update users');
-		})
-			
-		socket.on('set game', async (gameId, mapgrid)=>{
-			await game.editGame(gameId, mapgrid)
-			io.sockets.to(socket.id).emit('grid updated')
-		})
+	socket.on('set user', async (username, rover, letters)=> {
+		await game.editUser(username, rover, letters)
+		io.sockets.to(socket.id).emit(username, 'updated')
+		socket.broadcast.emit('update users');
+	})
+		
+	socket.on('set game', async (gameId, mapgrid)=>{
+		await game.editGame(gameId, mapgrid)
+		io.sockets.to(socket.id).emit('grid updated')
+	})
 
-		socket.on('get rovers', async (userList)=>{
-			let result = await game.getRovers(userList)
-			io.sockets.to(socket.id).emit('get rovers', result)
-		})
+	socket.on('get rovers', async (userList)=>{
+		let result = await game.getRovers(userList)
 
-		socket.on('next turn', async (gameId) => {
-			let gameObj = await game.nextTurn(gameId)
-			if(gameObj.hasOwnProperty('winners')){
-				io.sockets.emit('winners', gameObj)
-			}
-			else {
-				io.sockets.emit('get game', gameObj)
-			}
-		})
+		io.sockets.to(socket.id).emit('get rovers', result)
+	})
 
-		socket.on('score word', async (gameId, username, letters) => {
-			let score = await game.scoreWord(gameId, username, letters)
-			io.sockets.to(socket.id).emit('score word', score)
-		})
+	socket.on('next turn', async (gameId) => {
+		let gameObj = await game.nextTurn(gameId)
+		if(gameObj.hasOwnProperty('winners')){
+			io.sockets.emit('winners', gameObj)
+		}
+		else {
+			io.sockets.emit('get game', gameObj)
+		}
+	})
 
-  	socket.on('disconnect', () => {
+	socket.on('score word', async (gameId, username, letters) => {
+		let score = await game.scoreWord(gameId, username, letters)
+		io.sockets.to(socket.id).emit('score word', score)
+	})
+
+	socket.on('logout', async(gameId, username) => {
+		let logout = await game.removeUser(gameId, username)
+		if(logout.ulength >= 1 ){
+			io.sockets.emit('get game', logout)
+		}
+	})
+
+	socket.on('disconnect', () => {
 		console.log('user disconnected')
 		//need to remove user from game here entirely....
-  	})
+	})
 })
 
 app.use('/auth', auth)

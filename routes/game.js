@@ -52,7 +52,7 @@ const editGame = async (gameId, mapgrid) => {
 
 const getRovers = (userList)=>{
     let userDataPromise = userList.map(user => {
-        return Promise.all([Promise.resolve(user.name), gameCon.getData(user.name, 'position')])
+        return Promise.all([Promise.resolve(user), gameCon.getData(user, 'position')])
     })
     return Promise.all(userDataPromise)
 }
@@ -65,4 +65,12 @@ const scoreWord = async(gameId, username, letters)=>{
     return await helpers.scoreWord(gameId, username, letters)
 }
 
-module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord}
+const removeUser = async(gameId, username) => {
+    return await helpers.removeUserFromGame(gameId, username)
+}
+
+const retireGame = async(gameId) => {
+    return await helpers.retireGame(gameId)
+}
+
+module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord, removeUser, retireGame}

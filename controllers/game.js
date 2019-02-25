@@ -93,23 +93,8 @@ const getData = (id, key) => {
     })
 }
 
-// const getGameItem = (req,res,next) => {
-//     return helper.getGame(req.params.gameId)
-//     .then(result => {
-//         if(!result) return next({status: 400, message: "Game Not Found"})
-//         return helper.getGameItem(req.params.gameId, req.params.key)
-//     })
-//     .then(result => {
-//         if(!result) return next({status: 400, message: "Game Item Not Found"})
-//         return res.send(result)
-//     })
-//     .catch(err => {
-//         next(err)
-//     })
-// }
-
-const retireGame = (req, res, next) => {
-    return helper.retireGame(req.params.gameId)
+const retireGame = gameId => {
+    return helper.retireGame(gameId)
     .then(result => {
         return res.send('Deleted')
     })
@@ -119,7 +104,7 @@ const retireGame = (req, res, next) => {
 }
 
 
-const removeUserFromGame = (req, res, next) => {
+const removeUserFromGame = (gameId, username) => {
     return helper.removeUserFromGame(req.params.gameId, req.params.username)
     .then(result => {
         return res.send('User removed from game')
