@@ -8,6 +8,7 @@ const redisAsPromised = {
   set: promisify(client.set).bind(client), //like an object
   del: promisify(client.del).bind(client),
   sadd: promisify(client.sadd).bind(client), //add-to/create a set
+  srem: promisify(client.srem).bind(client),
   smembers: promisify(client.smembers).bind(client), //get members of a set
   flush: promisify(client.flushall).bind(client),
   hmset: promisify(client.hmset).bind(client),

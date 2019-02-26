@@ -4,28 +4,26 @@ const helpers = require('../lib/helpers')
 
 const router = express.Router()
 
-// router.get('/lobby', gameCon.getLobby) //changed to socket function
-// router.post('/', gameCon.createGame) //changed to coket function
-// router.get('/:gameId', gameCon.getGame) changed to socket function
-
-// router.get('/user/:username', gameCon.getUser) //changed to socket function
-// router.put('/user/:username', gameCon.editUser)
-
-router.delete('/:gameId', gameCon.retireGame)
-// router.get('/:gameId/item/:key', gameCon.getGameItem)
-router.put('/:gameId/user/:username', gameCon.addUserToGame)
-router.delete('/:gameId/user/:username', gameCon.removeUserFromGame)
-
 const newUser = async (username) => {
-    console.log('newUser ', username)
     let lobby = await gameCon.getLobby()
     let openGame = await findGame(lobby)
     if(!openGame){
         openGame = await gameCon.createGame()
     } 
-    console.log('open game here ', openGame)
     let result = await gameCon.addUserToGame(openGame, username)
     return result
+}
+
+const createGame = async () => {
+    let newGame = await gameCon.createGame()
+    return newGame
+}
+
+const addDirect = async (gameId, users) => {
+    for(let u = 0; u < users.length; u++){
+        let result = await gameCon.addUserToGame(gameId, users[u])
+    }
+    return users
 }
 
 const findGame = async (lobby) => {
@@ -75,4 +73,4 @@ const retireGame = async(gameId) => {
     return await helpers.retireGame(gameId)
 }
 
-module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord, removeUser, retireGame}
+module.exports = {router, newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord, removeUser, retireGame, createGame, addDirect}

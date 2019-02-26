@@ -88,23 +88,31 @@ io.on('connection', socket => {
 		}
 	})
 
-	socket.on('newGame', async(gameId) => {
-
-		let endGame = await game.getGame(gameId)
-		let uList = JSON.parse(endGame.users)
-		console.log('uList ', uList)
-		let retired = await game.retireGame(gameId)
-		let users = uList.map(u => game.newUser(u.name))
-
-
-		console.log('user promises ', users)
-		//why is this running?
-
-
-		// let newGameId = await Promise.all(users)
-		// for(let u = 0; u < endGame.users.length -1; i++){
-		// 	io.sockets.emit('connect game', newGameId, endGame.users[u].name)
-		// }
+	socket.on('newGame', (gameId) => {
+		console.log("STARTING NEW GAME PROCESS")
+		return game.getGame(gameId)
+		.then(endGame => {
+			uList = JSON.parse(endGame.users)
+			console.log('uList OF USERS TO PUT IN NEW GAME', uList)
+			return game.retireGame(gameId)
+		})
+		.then(() => {
+			console.log('CREATE THE NEW GAME')
+			return game.createGame()
+		})
+		.then(newGameId => {
+			let users = uList.map(u => u.name)
+			newGID = newGameId
+			return game.addDirect(newGameId, users)
+		})
+		.then(users => {
+			for(let u = 0; u < users.length; u++){
+				io.sockets.emit('connect game', newGID, users[u])
+			}
+		})
+		.catch(err => {
+			console.log(err)
+		})
 	})
 
 	socket.on('disconnect', () => {
