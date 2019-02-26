@@ -27,4 +27,21 @@ const createUser = (username, password) => {
     })
 }
 
-module.exports = {getById, getAll, getOneByUsername, createUser}
+const updateBestScore = (username, score) => {
+    return getOneByUsername(username)
+    .then(result => {
+        let oldScore = JSON.parse(result.highestScore)
+        if(score > oldScore){
+            return Users.updateOne({'username': username}, {'highestScore': score})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+const updateGamesWon = (id, gamesWon) => {
+    return Users.updateOne({'_id': id}, {'gamesWon': gamesWon})
+}
+
+module.exports = {getById, getAll, getOneByUsername, createUser, updateBestScore, updateGamesWon}

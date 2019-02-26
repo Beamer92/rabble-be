@@ -89,15 +89,12 @@ io.on('connection', socket => {
 	})
 
 	socket.on('newGame', (gameId) => {
-		console.log("STARTING NEW GAME PROCESS")
 		return game.getGame(gameId)
 		.then(endGame => {
 			uList = JSON.parse(endGame.users)
-			console.log('uList OF USERS TO PUT IN NEW GAME', uList)
 			return game.retireGame(gameId)
 		})
 		.then(() => {
-			console.log('CREATE THE NEW GAME')
 			return game.createGame()
 		})
 		.then(newGameId => {

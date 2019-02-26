@@ -43,4 +43,16 @@ const createUser = (req,res,next) => {
     })
 }
 
-module.exports = {getById, getUsers, createUser}
+const updateGamesWon = (req,res,next) => {
+    if(!req.body.gamesWon) next({status: 400, message: "Games Won Value Not Present"})
+    let gamesWon = req.body.gamesWon
+    userMod.updateGamesWon(req.params.id, gamesWon)
+    .then(result => {
+        res.status(200).send('Updated!')
+    })
+    .catch(err => {
+        next({status: 400, message: 'Could Not Update Games Won'})
+    })
+}
+
+module.exports = {getById, getUsers, createUser, updateGamesWon}
