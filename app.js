@@ -18,11 +18,10 @@ app.use(morgan('dev'))
 
 if(process.env.NODE_ENV !== 'production') {
   	require('dotenv').load()
-  	helpers.redisFlush()
 }
 
+helpers.redisFlush()
 const connectionstring = process.env.MONGODB_URI
-console.log('MONGO CON STRING ', connectionstring)
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
 io.on('connection', socket => {
