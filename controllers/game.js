@@ -9,7 +9,6 @@ const getLobby = () => {
         return result
     })
     .catch(err => {
-        // next(err)
         console.log(err)
     })
 }
@@ -21,7 +20,6 @@ const getGame = (gameId) => {
         return result
     })
     .catch(err => {
-        // next(err)
         console.log(err)
     })
 }
@@ -36,7 +34,6 @@ const createGame = () => {
         return gameId
     })
     .catch(err => {
-        // next(err)
         console.log(err)
     })
 }
@@ -47,7 +44,6 @@ const addUserToGame = (gameId, username) => {
         return gameId
     })
     .catch(err => {
-        // next(err)
         console.log(err)
     })
 }
@@ -103,7 +99,6 @@ const retireGame = gameId => {
     })
 }
 
-
 const removeUserFromGame = (gameId, username) => {
     return helper.removeUserFromGame(req.params.gameId, req.params.username)
     .then(result => {
@@ -113,7 +108,5 @@ const removeUserFromGame = (gameId, username) => {
         next(err)
     })
 }
-
-
 
 module.exports = {getLobby, createGame, getGame, getData, retireGame, addUserToGame, removeUserFromGame, getUser, editUser, editGame}

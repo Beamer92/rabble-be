@@ -62,7 +62,6 @@ io.on('connection', socket => {
 
 	socket.on('get rovers', async (userList)=>{
 		let result = await game.getRovers(userList)
-
 		io.sockets.to(socket.id).emit('get rovers', result)
 	})
 
