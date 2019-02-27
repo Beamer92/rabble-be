@@ -21,8 +21,7 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 helpers.redisFlush()
-const connectionstring = process.env.MONGODB_URI
-mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useCreateIndex: true })
 
 io.on('connection', socket => {
   	console.log('New client connected ', socket.id)
