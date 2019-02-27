@@ -22,6 +22,7 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 const connectionstring = process.env.MONGODB_URI
+console.log(connectionstring)
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
 io.on('connection', socket => {
