@@ -21,7 +21,7 @@ if(process.env.NODE_ENV !== 'production') {
   	helpers.redisFlush()
 }
 
-const connectionstring = `${process.env.MONGODB_CSTRING}`
+const connectionstring = process.env.MONGODB_CSTRING
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
 io.on('connection', socket => {
