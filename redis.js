@@ -1,7 +1,7 @@
 const redis = require('redis')
 const {promisify} = require('util')
 
-const client = redis.createClient()
+const client = redis.createClient(process.env.REDIS_URL || undefined)
 
 const redisAsPromised = {
   get: promisify(client.get).bind(client), //get an object-like thing by it's key
@@ -19,16 +19,3 @@ const redisAsPromised = {
 }
 
 module.exports = {redisAsPromised}
-
-// HSET , key=Lobby, gameid, gameid, gameid
-
-// HMSET (Hash Map Set), GameID, 
-// map: array
-// user1: username
-// user2: username
-// user3: username
-// user4: null
-
-// HMSET username
-// position: array
-// letters: string
