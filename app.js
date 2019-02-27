@@ -21,8 +21,7 @@ if(process.env.NODE_ENV !== 'production') {
   	helpers.redisFlush()
 }
 
-//THIS WILL NEED CHANGING WHEN DEPLOYED
-const connectionstring = `mongodb://localhost:${process.env.MONGODB_PORT}/${process.env.MONGODB_NAME}`
+const connectionstring = `${process.env.MONGODB_CSTRING}`
 mongoose.connect(connectionstring, {useNewUrlParser: true, useCreateIndex: true })
 
 io.on('connection', socket => {
