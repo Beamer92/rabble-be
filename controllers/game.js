@@ -8,14 +8,13 @@ const newUser = async (username) => {
     if(!openGame){
         openGame = await createGame()
     } 
-    let result = await helpers.addUserToGame(openGame, username)
-    return result
+    await helpers.addUserToGame(openGame, username)
+    return openGame
 }
 
 const findGame = async (lobby) => {
     if(lobby.length === 0) return null
     let game = await helpers.getGame(lobby[0])
-
     if(game.ulength < 4) return lobby[0]
     return findGame(lobby.slice(1))
 }

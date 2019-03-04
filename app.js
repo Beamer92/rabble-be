@@ -38,13 +38,13 @@ io.on('connection', socket => {
   	})
 
   	socket.on('get user', async (username) => {
-			let user = await game.getUser(username)
+		let user = await game.getUser(username)
     	io.sockets.to(socket.id).emit('get user', user)
   	})
 
 	socket.on('get game', async (gameId) => {
-			let gameObj = await game.getGame(gameId)
-			io.sockets.emit('get game', gameObj)
+		let gameObj = await game.getGame(gameId)
+		io.sockets.emit('get game', gameObj)
 	})
 
 	socket.on('set user', async (username, rover, letters)=> {
