@@ -10,7 +10,7 @@ let server = require('http').Server(app)
 var io = require('socket.io').listen(server);
 const auth = require('./routes/auth')
 const user = require('./routes/user')
-const game = require('./routes/game')
+const game = require('./controllers/game')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -117,7 +117,6 @@ io.on('connection', socket => {
 
 app.use('/auth', auth)
 app.use('/user', user)
-app.use('/game', game.router)
 
 app.use((err, req, res, next) => {
 	const status = err.status

@@ -1,112 +1,76 @@
-const helper = require('../lib/helpers')
+const helpers = require('../lib/helpers')
 const shortid = require('shortid')
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-@') //set characters for shortid, don't want underscores or dashes
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-@')
 
-
-const getLobby = () => {
-    return helper.getLobby()
-    .then(result => {
-        return result
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const newUser = async (username) => {
+    let lobby = await helpers.getLobby()
+    let openGame = await findGame(lobby)
+    if(!openGame){
+        openGame = await createGame()
+    } 
+    let result = await helpers.addUserToGame(openGame, username)
+    return result
 }
 
-const getGame = (gameId) => {
-    return helper.getGame(gameId)
-    .then(result => {
-        if(!result) return 'Game Not Found'
-        return result
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const findGame = async (lobby) => {
+    if(lobby.length === 0) return null
+    let game = await helpers.getGame(lobby[0])
+
+    if(game.ulength < 4) return lobby[0]
+    return findGame(lobby.slice(1))
 }
 
-const createGame = () => {
+const createGame = async () => {
     const gameId = shortid.generate()
-    return helper.addToLobby(gameId)
-    .then(() => {
-        return helper.createGame(gameId)
-    })
-    .then(result => {
-        return gameId
-    })
-    .catch(err => {
-        console.log(err)
-    })
+    await helpers.addToLobby(gameId)
+    await helpers.createGame(gameId)
+    return gameId
 }
 
-const addUserToGame = (gameId, username) => {
-    return helper.addUserToGame(gameId, username)
-    .then(result => {
-        return gameId
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const addDirect = async (gameId, users) => {
+    for(let u = 0; u < users.length; u++){
+        await helpers.addUserToGame(gameId, users[u])
+    }
+    return users
 }
 
-
-const getUser = (username) => {
-    return helper.getUser(username)
-    .then(result => {
-        return result
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const getUser = async(username) => {
+   return await helpers.getUser(username)
 }
 
-const editUser = (username, rover, letters) => {
-    return helper.editUser(username, rover, letters)
-    .then(result => {
-        return result
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const getGame = async (gameId) => {
+    return await helpers.getGame(gameId)
 }
 
-const editGame = (gameId, mapgrid) => {
-    return helper.editGame(gameId, mapgrid)
-    .then(result => {
-        return result
-    })
-    .catch(err => {
-        console.log(err)
-    })
+const editUser = async (username, rover, letters) => {
+    return await helpers.editUser(username, rover, letters)
 }
 
-const getData = (id, key) => {
-    return helper.getData(id, key)
-    .then(result => {
-        return result
+const editGame = async (gameId, mapgrid) => {
+    return await helpers.editGame(gameId, mapgrid)
+} 
+
+const getRovers = (userList)=>{
+    let userDataPromise = userList.map(user => {
+        return Promise.all([Promise.resolve(user), helpers.getData(user, 'position')])
     })
-    .catch(err => {
-        console.log(err)
-    })
+    return Promise.all(userDataPromise)
 }
 
-const retireGame = gameId => {
-    return helper.retireGame(gameId)
-    .then(result => {
-        return res.send('Deleted')
-    })
-    .catch(err => {
-        next(err)
-    })
+const nextTurn= async (gameId)=> {
+    return await helpers.nextTurn(gameId)
 }
 
-const removeUserFromGame = (gameId, username) => {
-    return helper.removeUserFromGame(req.params.gameId, req.params.username)
-    .then(result => {
-        return res.send('User removed from game')
-    })
-    .catch(err => {
-        next(err)
-    })
+const scoreWord = async(gameId, username, letters)=>{
+    return await helpers.scoreWord(gameId, username, letters)
 }
 
-module.exports = {getLobby, createGame, getGame, getData, retireGame, addUserToGame, removeUserFromGame, getUser, editUser, editGame}
+const removeUser = async(gameId, username) => {
+    return await helpers.removeUserFromGame(gameId, username)
+}
+
+const retireGame = async(gameId) => {
+    return await helpers.retireGame(gameId)
+}
+
+module.exports = {newUser, getUser, getGame, editUser, editGame, getRovers, nextTurn, scoreWord, removeUser, retireGame, createGame, addDirect}

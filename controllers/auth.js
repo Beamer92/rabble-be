@@ -7,13 +7,13 @@ function login(req, res, next){
     authMod.userLogin(req.body.username, req.body.password)
     .then(function(user){
       const token = jwt.sign({id: user.id, username: user.username}, process.env.SECRET)
-      return res.status(200).json(JSON.stringify({ token }))
+      return res.status(200).json({ token })
     })
     .catch(next)
   }
 
 function getAuthStatus(req, res, next){
-  res.status(200).json(JSON.stringify({id: req.claim.id}))
+  res.status(200).json({id: req.claim.id})
 }
 
 function authenticated(req, res, next){
