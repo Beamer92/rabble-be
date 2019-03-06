@@ -33,12 +33,12 @@ const addDirect = async (gameId, users) => {
     return users
 }
 
-const getUser = async(username) => {
-   return await helpers.getUser(username)
+const getUser = (username) => {
+   return helpers.getUser(username)
 }
 
-const getGame = async (gameId) => {
-    return await helpers.getGame(gameId)
+const getGame = (gameId) => {
+    return helpers.getGame(gameId)
 }
 
 const editUser = async (username, rover, letters) => {
