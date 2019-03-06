@@ -80,7 +80,7 @@ io.on('connection', socket => {
 
 	socket.on('logout', async(gameId, username) => {
 		let logout = await game.removeUser(gameId, username)
-		if(logout.ulength >= 1 ){
+		if(logout){
 			io.sockets.emit('get game', logout)
 		}
 	})
