@@ -25,7 +25,6 @@ mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useCreateIndex
 
 io.on('connection', socket => {
   	console.log('New client connected ', socket.id)
-
   	socket.on('connect game', async (username) => {
     	let user = await game.getUser(username)
     	if(!user){
