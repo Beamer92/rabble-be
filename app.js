@@ -67,9 +67,11 @@ io.on('connection', socket => {
 		if(gameObj.hasOwnProperty('winners')){
 			io.sockets.emit('winners', gameObj)
 		}
+		//if last turn, emit 'get game last turn?'
 		else {
 			io.sockets.emit('get game', gameObj)
 		}
+		
 	})
 
 	socket.on('score word', async (gameId, username, letters) => {
